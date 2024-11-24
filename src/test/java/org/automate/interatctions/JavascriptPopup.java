@@ -48,6 +48,38 @@ public class JavascriptPopup {
     }
 
     @Test
+    public void Popup_Confirm_Test() throws Exception {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("disable-search-engine-choice-screen");
+        WebDriver driver = new ChromeDriver(chromeOptions);
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.manage().window().maximize();
+        //Navigate to Url
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+        //This is added for seeing the page > remove it
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
+        Thread.sleep(2000);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Click for JS Confirm']")));
+        var button = driver.findElement(By.xpath("//button[text()='Click for JS Confirm']"));
+        button.click();
+
+        org.openqa.selenium.Alert alert = driver.switchTo().alert();
+        //This is added for seeing the page > remove it
+        //Store the alert text in a variable and verify it
+        String text = alert.getText();
+        System.out.println( text);
+
+        assertEquals(text, "I am a JS Confirm");
+        //Press the cancel button
+        alert.dismiss();
+        System.out.println("Alert Cancelled");
+        Thread.sleep(3000);
+        driver.quit();
+    }
+
+    @Test
     public void testForAlerts() throws Exception {
 
         ChromeOptions chromeOptions = new ChromeOptions();
